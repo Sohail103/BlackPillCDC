@@ -33,7 +33,7 @@
 /* Private variables ---------------------------------------------------------*/
   uint8_t Buffer[7];
   extern char usbd_ch;
-  extern int flag = 0;
+  extern int flag;
 /* USER CODE END PV */
 
 /** @addtogroup STM32_USB_OTG_DEVICE_LIBRARY

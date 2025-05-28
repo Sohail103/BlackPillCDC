@@ -115,22 +115,22 @@ int main(void)
 	  //CDC_Transmit_FS((uint8_t*)"Ping\r\n", 6);   // code for displaying ping
 	  //HAL_Delay(1000);
 
-    if(flag=1)
+    if(flag==1)
     {
       switch(usbd_ch)
       {
         case '1':
-        { CDC_TRANSMIT_FS(buffer1, strlen(buffer1));
+        { CDC_Transmit_FS((uint8_t*)buffer1, strlen(buffer1));
         break;
         }
         case '2':
         {
-          CDC_TRANSMIT_FS(buffer2, strlen(buffer2));
+          CDC_Transmit_FS((uint8_t*)buffer2, strlen(buffer2));
           break;
         }
         case '3':
         {
-          CDC_TRANSMIT_FS(buffer3, strlen(buffer3));
+          CDC_Transmit_FS((uint8_t*)buffer3, strlen(buffer3));
           break;
         }
       }
