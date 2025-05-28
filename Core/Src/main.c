@@ -24,6 +24,10 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include "usbd_cdc.h"
+#include <string.h>
+#include <stdio.h>
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -45,6 +49,12 @@
 I2C_HandleTypeDef hi2c1;
 
 /* USER CODE BEGIN PV */
+
+char usbd_ch;
+int flag=0;
+char buffer1[] = "You sent 1, get 1 back\r\n";
+char buffer2[] = "You sent 2, get 2 back\r\n";
+char buffer3[] = "You sent 3, get 3 back\r\n";
 
 /* USER CODE END PV */
 
@@ -102,8 +112,30 @@ int main(void)
   {
     /* USER CODE END WHILE */
 
-	  CDC_Transmit_FS((uint8_t*)"Ping\r\n", 6);
-	  HAL_Delay(1000);
+	  //CDC_Transmit_FS((uint8_t*)"Ping\r\n", 6);   // code for displaying ping
+	  //HAL_Delay(1000);
+
+    if(flag=1)
+    {
+      switch(usbd_ch)
+      {
+        case '1':
+        { CDC_TRANSMIT_FS(buffer1, strlen(buffer1));
+        break;
+        }
+        case '2':
+        {
+          CDC_TRANSMIT_FS(buffer2, strlen(buffer2));
+          break;
+        }
+        case '3':
+        {
+          CDC_TRANSMIT_FS(buffer3, strlen(buffer3));
+          break;
+        }
+      }
+      flag=0;
+    }
 
     /* USER CODE BEGIN 3 */
   }
