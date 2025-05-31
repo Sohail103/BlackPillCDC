@@ -51,10 +51,6 @@ I2C_HandleTypeDef hi2c1;
 /* USER CODE BEGIN PV */
 
 char usbd_ch;
-int flag=0;
-char buffer1[] = "You sent 1, get 1 back\r\n";
-char buffer2[] = "You sent 2, get 2 back\r\n";
-char buffer3[] = "You sent 3, get 3 back\r\n";
 
 /* USER CODE END PV */
 
@@ -63,6 +59,8 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_I2C1_Init(void);
 /* USER CODE BEGIN PFP */
+
+
 
 /* USER CODE END PFP */
 
@@ -104,6 +102,21 @@ int main(void)
   MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 2 */
 
+  uint8_t check;
+  uint8_t Data;
+
+  HAL_I2C_Mem_Read(&hi2c1, 0xD0, 0x75, 1, &check, 1, HAL_MAX_DELAY);  // 0x68 << 1 = 0xD0
+  if (check == 0x68) {
+      // MPU6050 found, now wake it up
+      Data = 0;
+      HAL_I2C_Mem_Write(&hi2c1, 0xD0, 0x6B, 1, &Data, 1, HAL_MAX_DELAY);
+  }
+
+  uint8_t Rec_data[14];
+  int16_t ax, ay, az, gx, gy, gz;
+
+  char usb_buf[64];
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -114,28 +127,19 @@ int main(void)
 
 	  //CDC_Transmit_FS((uint8_t*)"Ping\r\n", 6);   // code for displaying ping
 	  //HAL_Delay(1000);
+	  HAL_I2C_MEM_Read(&hi2c1, 0xD0, 0x3B, 1, Rec_data, 14, HAL_MAX_DELAY);
 
-    if(flag==1)
-    {
-      switch(usbd_ch)
-      {
-        case '1':
-        { CDC_Transmit_FS((uint8_t*)buffer1, strlen(buffer1));
-        break;
-        }
-        case '2':
-        {
-          CDC_Transmit_FS((uint8_t*)buffer2, strlen(buffer2));
-          break;
-        }
-        case '3':
-        {
-          CDC_Transmit_FS((uint8_t*)buffer3, strlen(buffer3));
-          break;
-        }
-      }
-      flag=0;
-    }
+	  ax = (int16_t)(Rec_Data[0]<<8 | Rec_Data[1]);
+	  ay = (int16_t)(Rec_Data[2]<<8 | Rec_Data[3]);
+	  az = (int16_t)(Rec_Data[4]<<8 | Rec_Data[5]);
+	  gx = (int16_t)(Rec_Data[8]<<8 | Rec_Data[9]);
+	  gy = (int16_t)(Rec_Data[10]<<8 | Rec_Data[11]);
+	  gz = (int16_t)(Rec_Data[12]<<8 | Rec_Data[13]);
+
+	  sprintf(usb_buf, "AX: %d, AY: %d, AZ: %d, GX: %d, GY: %d, GZ: %d");
+	  CDC_Transmit_FS((uint8_t*)usb_buf, strlen(usb_buf));
+	  HAL_Delay(1000);
+
 
     /* USER CODE BEGIN 3 */
   }
