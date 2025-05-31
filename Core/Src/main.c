@@ -127,16 +127,16 @@ int main(void)
 
 	  //CDC_Transmit_FS((uint8_t*)"Ping\r\n", 6);   // code for displaying ping
 	  //HAL_Delay(1000);
-	  HAL_I2C_MEM_Read(&hi2c1, 0xD0, 0x3B, 1, Rec_data, 14, HAL_MAX_DELAY);
+	  HAL_I2C_Mem_Read(&hi2c1, 0xD0, 0x3B, 1, Rec_data, 14, HAL_MAX_DELAY);
 
-	  ax = (int16_t)(Rec_Data[0]<<8 | Rec_Data[1]);
-	  ay = (int16_t)(Rec_Data[2]<<8 | Rec_Data[3]);
-	  az = (int16_t)(Rec_Data[4]<<8 | Rec_Data[5]);
-	  gx = (int16_t)(Rec_Data[8]<<8 | Rec_Data[9]);
-	  gy = (int16_t)(Rec_Data[10]<<8 | Rec_Data[11]);
-	  gz = (int16_t)(Rec_Data[12]<<8 | Rec_Data[13]);
+	  ax = (int16_t)(Rec_data[0]<<8 | Rec_data[1]);
+	  ay = (int16_t)(Rec_data[2]<<8 | Rec_data[3]);
+	  az = (int16_t)(Rec_data[4]<<8 | Rec_data[5]);
+	  gx = (int16_t)(Rec_data[8]<<8 | Rec_data[9]);
+	  gy = (int16_t)(Rec_data[10]<<8 | Rec_data[11]);
+	  gz = (int16_t)(Rec_data[12]<<8 | Rec_data[13]);
 
-	  sprintf(usb_buf, "AX: %d, AY: %d, AZ: %d, GX: %d, GY: %d, GZ: %d");
+	  sprintf(usb_buf, "AX: %d, AY: %d, AZ: %d, GX: %d, GY: %d, GZ: %d", ax, ay, az, gx, gy, gz);
 	  CDC_Transmit_FS((uint8_t*)usb_buf, strlen(usb_buf));
 	  HAL_Delay(1000);
 
