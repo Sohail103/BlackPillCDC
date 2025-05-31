@@ -279,7 +279,7 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
   USBD_CDC_SetRxBuffer(&hUsbDeviceFS, &Buf[0]);
   USBD_CDC_ReceivePacket(&hUsbDeviceFS);
   usbd_ch = Buf[0];
-  flag=1;
+  //flag=1;
 
   return (USBD_OK);
   /* USER CODE END 6 */
