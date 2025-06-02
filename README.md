@@ -9,3 +9,4 @@ This project is the initial STM32CubeIDE setup for USB CDC and I2C1 communicatio
 
 ## How to Build
 Open with STM32CubeIDE and build. Flash using ST-Link or DFU.
+Use linker flags -u_printf_float
