@@ -114,7 +114,7 @@ int main(void)
 
   uint8_t Rec_data[14];
   int16_t ax, ay, az, gx, gy, gz;
-  int16_t axf,ayf,azf,gxf,gyf,gzf;
+  float axf,ayf,azf,gxf,gyf,gzf;
 
   char usb_buf[64];
 
@@ -137,16 +137,16 @@ int main(void)
 	  gy = (int16_t)(Rec_data[10]<<8 | Rec_data[11]);
 	  gz = (int16_t)(Rec_data[12]<<8 | Rec_data[13]);
 
-	  axf = ax/16384;
-	  ayf = ay/16384;
-	  azf = az/16384;
-	  gxf = gx/131;
-	  gyf = gy/131;
-	  gzf = gz/131;
+	  axf = ax/16384.0f;
+	  ayf = ay/16384.0f;
+	  azf = az/16384.0f;
+	  gxf = gx/131.0f;
+	  gyf = gy/131.0f;
+	  gzf = gz/131.0f;
 
-	  sprintf(usb_buf, "AX: %d, AY: %d, AZ: %d, GX: %d, GY: %d, GZ: %d\n", axf, ayf, azf, gxf, gyf, gzf);
+	  sprintf(usb_buf, "AX:%.2f,AY:%.2f,AZ:%.2f,GX:%.2f,GY:%.2f,GZ:%.2f\n", axf, ayf, azf, gxf, gyf, gzf);
 	  CDC_Transmit_FS((uint8_t*)usb_buf, strlen(usb_buf));
-	  HAL_Delay(2500);
+	  HAL_Delay(300);
 
 
     /* USER CODE BEGIN 3 */
