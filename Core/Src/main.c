@@ -125,28 +125,34 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
-	  //CDC_Transmit_FS((uint8_t*)"Ping\r\n", 6);   // code for displaying ping
-	  //HAL_Delay(1000);
 	  HAL_I2C_Mem_Read(&hi2c1, 0xD0, 0x3B, 1, Rec_data, 14, HAL_MAX_DELAY);
 
-	  ax = (int16_t)(Rec_data[0]<<8 | Rec_data[1]);
-	  ay = (int16_t)(Rec_data[2]<<8 | Rec_data[3]);
-	  az = (int16_t)(Rec_data[4]<<8 | Rec_data[5]);
-	  gx = (int16_t)(Rec_data[8]<<8 | Rec_data[9]);
-	  gy = (int16_t)(Rec_data[10]<<8 | Rec_data[11]);
-	  gz = (int16_t)(Rec_data[12]<<8 | Rec_data[13]);
+	  // Combine high and low bytes
+	  ax = (int16_t)(Rec_data[0] << 8 | Rec_data[1]);
+	  ay = (int16_t)(Rec_data[2] << 8 | Rec_data[3]);
+	  az = (int16_t)(Rec_data[4] << 8 | Rec_data[5]);
+	  gx = (int16_t)(Rec_data[8] << 8 | Rec_data[9]);
+	  gy = (int16_t)(Rec_data[10] << 8 | Rec_data[11]);
+	  gz = (int16_t)(Rec_data[12] << 8 | Rec_data[13]);
 
-	  axf = ax/16384.0f;
-	  ayf = ay/16384.0f;
-	  azf = az/16384.0f;
-	  gxf = gx/131.0f;
-	  gyf = gy/131.0f;
-	  gzf = gz/131.0f;
+	  // Sensitivities
+	  #define ACCEL_SCALE 16384.0f        // 2g
+	  #define GYRO_SCALE 131.0f           // 250 degrees/s 
+	  #define DEG_TO_RAD 0.0174532925f    // pi/180
+
+	  // SI units
+	  axf = (float)ax / ACCEL_SCALE * 9.80665f;        // m/s^2
+	  ayf = (float)ay / ACCEL_SCALE * 9.80665f;
+	  azf = (float)az / ACCEL_SCALE * 9.80665f;
+
+	  gxf = ((float)gx / GYRO_SCALE) * DEG_TO_RAD;       // rad/s
+	  gyf = ((float)gy / GYRO_SCALE) * DEG_TO_RAD;
+	  gzf = ((float)gz / GYRO_SCALE) * DEG_TO_RAD;
+
 
 	  sprintf(usb_buf, "AX:%.2f,AY:%.2f,AZ:%.2f,GX:%.2f,GY:%.2f,GZ:%.2f\n", axf, ayf, azf, gxf, gyf, gzf);
 	  CDC_Transmit_FS((uint8_t*)usb_buf, strlen(usb_buf));
-	  HAL_Delay(300);
+	  HAL_Delay(20);
 
 
     /* USER CODE BEGIN 3 */
