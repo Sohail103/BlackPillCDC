@@ -1,4 +1,4 @@
-9# STM32 Blackpill - USB CDC + I2C1 Setup
+## STM32 Blackpill - USB CDC + I2C1 Setup
 
 This project is the initial STM32CubeIDE setup for USB CDC and I2C1 communication on the STM32F401CC Blackpill board.
 
